@@ -34,9 +34,7 @@ class MyTest extends BaseTest {
         await this.driver.findElement(By.xpath("//a[text()='"+book_title+"']")).click();
 
         // 5 Esborra llibre
-        await this.driver.sleep(1000);
         await this.driver.findElement(By.xpath("//a[contains(@class, 'deletelink')]")).click();
-        await this.driver.sleep(2000);
         await this.driver.findElement(By.xpath("//input[@type='submit']")).click();
 
         // x cerrar sessió
