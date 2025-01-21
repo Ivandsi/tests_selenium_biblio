@@ -10,35 +10,47 @@ require('dotenv').config();
 const site_url = process.env.site_url;
 const username = process.env.username;
 const password = process.env.password;
+const book_title = process.env.book_title;
 
 // heredem una classe amb un sol mètode test()
 // emprem this.driver per utilitzar Selenium
 
 class MyTest extends BaseTest {
-        async test() {
-                // testejem H1 a la home page
-                //////////////////////////////////////////////////////
-                await this.driver.get(site_url+"/admin/login/");
+    async test() {
+        // testejem H1 a la home page
+        //////////////////////////////////////////////////////
+        await this.driver.get(site_url + "/admin/login/");
 
-                // 2 posar usuari i pass
-                await this.driver.findElement(By.name("username")).sendKeys(username);
-                await this.driver.findElement(By.name("password")).sendKeys(password);
+        // 2 posar usuari i pass
+        await this.driver.findElement(By.name("username")).sendKeys(username);
+        await this.driver.findElement(By.name("password")).sendKeys(password);
 
-                // 3 boto send .click()
-                await this.driver.findElement(By.xpath("//input[@value='Iniciar sessió']")).click();
+        // 3 boto send .click()
+        await this.driver.findElement(By.xpath("//input[@value='Iniciar sessió']")).click();
 
-                // 4 cerrar sessió
-                await this.driver.sleep(1000);
-                await this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+        // 4 Entra a la secció de llibres i al llibre que vol esborrar
+        await this.driver.findElement(By.xpath("//a[text()='Llibres']")).click();
 
-                console.log("TEST OK");
-        }
+        await this.driver.findElement(By.xpath("//a[text()='"+book_title+"']")).click();
+
+        // 5 Esborra llibre
+        await this.driver.sleep(1000);
+        await this.driver.findElement(By.xpath("//a[contains(@class, 'deletelink')]")).click();
+        await this.driver.sleep(2000);
+        await this.driver.findElement(By.xpath("//input[@type='submit']")).click();
+
+        // x cerrar sessió
+        await this.driver.sleep(1000);
+        await this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        console.log("TEST OK");
+    }
 }
 
 // executem el test
 
 (async function test_example() {
-        const test = new MyTest();
-        await test.run();
-        console.log("END")
+    const test = new MyTest();
+    await test.run();
+    console.log("END")
 })();
